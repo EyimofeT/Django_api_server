@@ -55,11 +55,11 @@ def userCreate(request):
         # print(uniqueEmailStatus)
         if uniqueUsernameStatus == True and uniqueEmailStatus == True:
             try:
-                print("i am here")
+                
                 if serializer.is_valid():
-                    print("i am here1")
+                    
                     serializer.save()
-                    print("i am here2")
+                    
                     user = User.objects.all().last()
                     serializer = UserCreatedSerializer(user)
 

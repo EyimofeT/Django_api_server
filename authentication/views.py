@@ -1,3 +1,13 @@
+import datetime
+import jwt
+import json
+from rest_framework.exceptions import AuthenticationFailed
+from django.http import JsonResponse
+from django.shortcuts import render
+from urllib import response
+import re
+from user.models import User
+from user.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -8,20 +18,10 @@ from rest_framework.decorators import api_view
 # from ..api.serializers import UserSerializer
 import sys
 sys.path.append("..")
-from user.serializers import UserSerializer
-from user.models import User
-# import api.serializers.UserSerializer 
-import re
-from urllib import response
-from django.shortcuts import render
-from django.http import JsonResponse
+# import api.serializers.UserSerializer
 
 
-from rest_framework.exceptions import AuthenticationFailed
 # Create your views here.
-import json
-import jwt
-import datetime
 
 
 @api_view(['POST'])
@@ -29,7 +29,7 @@ def logout(request):
     response = Response()
     response.delete_cookie('jwt')
     response.data = {
-         "status": 200,
+        "status": 200,
         'Message': 'Logout Successful'
     }
     return response
@@ -37,35 +37,38 @@ def logout(request):
 
 @api_view(['POST'])
 def userLogin(request):
+    if (request.data['username'] is not None and request.data['password']is not None):
+        username_input = request.data['username'].lower()
+        password_input = request.data['password']
+        user = User.objects.filter(username=username_input).first()
+        user_serializer = UserSerializer(user, many=False)
 
-    username_input = request.data['username'].lower()
-    password_input = request.data['password']
-    user = User.objects.filter(username=username_input).first()
-    user_serializer = UserSerializer(user, many=False)
+        if user is None:
+            raise AuthenticationFailed("User not Found!")
 
-    if user is None:
-        raise AuthenticationFailed("User not Found!")
+        if not user.check_password(password_input):
+            raise AuthenticationFailed("Incorrect Password!")
 
-    if not user.check_password(password_input):
-        raise AuthenticationFailed("Incorrect Password!")
+        payload = {
+            'id': user.id,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'iat': datetime.datetime.utcnow(),
+            "is_superuser": user.is_superuser,
 
-    payload = {
-        'id': user.id,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-        'iat': datetime.datetime.utcnow(),
-        "is_superuser": user.is_superuser,
-
-    }
-    token = jwt.encode(payload, 'secret', algorithm='HS256')
+        }
+        token = jwt.encode(payload, 'secret', algorithm='HS256')
     # .decode('utf-8')
 
-    response = Response()
-    response.set_cookie(key='jwt', value=token, httponly=True)
-    response.data = {
-        "Message": "Login Successful",
-        "Status": 200,
-        'jwt': token
-    }
+        response = Response()
+        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.data = {
+            "Message": "Login Successful",
+            "Status": 200,
+            'jwt': token
+        }
+    
+    else:
+        raise AuthenticationFailed("username and password field required!")
 
     # return Response(user_serializer.data)
     return response

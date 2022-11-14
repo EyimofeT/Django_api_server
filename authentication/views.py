@@ -37,8 +37,8 @@ def logout(request):
 
 @api_view(['POST'])
 def userLogin(request):
-    response = Response()
-    try:
+        response = Response()
+    # try:
         print("i am here 0")
         username_input = request.data['username'].lower()
         password_input = request.data['password']
@@ -75,10 +75,10 @@ def userLogin(request):
             'jwt': token
         }
 
-    except Exception as e:  # work on python 2.x
-        response.data = {
-            "Error Occured": str(e)
-        }
+    # except Exception as e:  # work on python 2.x
+    #     response.data = {
+    #         "Error Occured": str(e)
+    #     }
         
    
     return response

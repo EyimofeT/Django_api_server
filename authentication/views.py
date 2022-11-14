@@ -47,7 +47,7 @@ def userLogin(request):
         user = User.objects.all().filter(username=username_input).first()
         print("i am here 0.9")
         # user_serializer = UserSerializer(user, many=False)
-        
+
         print("i am here1")
         if user is None:
             raise AuthenticationFailed("User not Found!")
@@ -63,10 +63,10 @@ def userLogin(request):
             "is_superuser": user.is_superuser,
 
         }
-        
+
         print("i am here3")
         token = jwt.encode(payload, 'secret', algorithm='HS256')
-        
+
         print("i am here4")
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
@@ -79,6 +79,6 @@ def userLogin(request):
     #     response.data = {
     #         "Error Occured": str(e)
     #     }
-        
-   
-    return response
+
+
+        return response

@@ -34,7 +34,47 @@ def apiOverview(request):
 
 @api_view(['POST'])
 def userCreate(request):
-    return Response({"Status":"Coming Soon"})
+    # return Response({"Status":"Coming Soon"})
+    try:
+        request.data['firstname'] = request.data['firstname'].lower()
+        request.data['lastname'] = request.data['lastname'].lower()
+        request.data['username'] = request.data['username'].lower()
+        password = request.data['password']
+        request.data['balance'] = float(0)
+        request.data['account_number'] = helpers.generate_account_number()
+        uname = str(request.data['username'])
+        uniqueUsernameStatus = helpers.checkUsernameInput(uname)
+        serializer = UserSerializer(data=request.data)
+
+        if uniqueUsernameStatus == True:
+            try:
+                if serializer.is_valid():
+                    serializer.save()
+                    user = User.objects.all().last()
+                    serializer = UserCreatedSerializer(user)
+
+                    response = {
+                    "Status": "200",
+                    "data": [
+                        serializer.data
+                    ]
+                    }
+            except:
+                response = {
+                    "Error: User Not Created : Check Input"
+                }
+    
+        elif uniqueUsernameStatus == False:
+            response = {
+                "Error: Username Already Exists"
+            }       
+
+    except Exception as e:
+        response = {
+            "Error Occured": str(e)
+        }
+
+    return Response(response)
 
 
 @api_view(['GET'])

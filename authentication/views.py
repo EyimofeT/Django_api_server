@@ -74,7 +74,7 @@ def userLogin(request):
 
     except Exception as e:  # work on python 2.x
         response.data = {
-            "Error Occured": e
+            "Error Occured": str(e)
         }
         
    

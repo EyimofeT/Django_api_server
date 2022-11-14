@@ -32,9 +32,9 @@ def apiOverview(request):
 
 @api_view(['POST'])
 def userCreate(request):
-    
+
     try:
-        uname=str(request.data['username'])
+        uname = str(request.data['username'])
         uniqueUsernameStatus = helpers.checkUsernameInput(uname)
         request.data['firstname'] = request.data['firstname'].lower()
         request.data['lastname'] = request.data['lastname'].lower()
@@ -43,40 +43,41 @@ def userCreate(request):
         request.data['accountnumber'] = helpers.generate_account_number()
         request.data['balance'] = float(0)
         serializer = UserSerializer(data=request.data)
-        
-       
-    
-        if uniqueUsernameStatus==True:
-             
-            if serializer.is_valid():  
+
+        if uniqueUsernameStatus == True:
+
+            if serializer.is_valid():
                 serializer.save()
                 user = User.objects.all().last()
                 serializer = UserCreatedSerializer(user)
                 response = {
-                        "Status": "200",
-                        "data": [
-                            serializer.data
-                        ]
-                    }
-            else:
-                response = {"Status":"400",
-                "Message": "User Not Created  Check Input"
+                    "Status": "200",
+                    "data": [
+                        serializer.data
+                    ]
                 }
-        elif uniqueUsernameStatus==False:
-            response = {"Status":"400",
-                        
+                return Response(response)
+            else:
+                response = {"Status": "400",
+                            "Message": "User Not Created  Check Input"
+                            }
+                return Response(response)
+        elif uniqueUsernameStatus == False:
+            response = {"Status": "400",
+
                         "Message": "Username Already Exists"
-                        } 
+                        }
+            return Response(response)
 
-    
     except Exception as e:
-        response = {
-            "message": str(e)
-        }
-    
-    return Response(response)
+        response = {"Status": "400",
+                    "message": str(e)
+                    }
+        return Response(response)
 
-       
+    # return Response(response)
+
+
 @api_view(['GET'])
 def accountdetails(request):
     token = request.COOKIES.get('jwt')

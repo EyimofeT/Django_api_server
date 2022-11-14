@@ -42,7 +42,7 @@ def userLogin(request):
         username_input = request.data['username'].lower()
         password_input = request.data['password']
         user = User.objects.filter(username=username_input).first()
-        user_serializer = UserSerializer(user, many=False)
+        # user_serializer = UserSerializer(user, many=False)
 
         if user is None:
             raise AuthenticationFailed("User not Found!")

@@ -21,12 +21,10 @@ import datetime
 @api_view(['GET'])
 def apiOverview(request):
     list = {
-        "User SignUp": "/api/signup/",
-        "User LogIn": '/api/authentication/login/',
-        "User LogOut": '/api/authentication/logout/',
-        "User Deposit": "/api/userdeposit/",
-        "Users Withdrawal": '/api/withdrawal/',
-        "Users Account Details": '/api/accountdetails/',
+        "User SignUp": "api/user/signup/",
+        "User Deposit": "api/user/deposit/",
+        "Users Withdrawal": 'api/user/withdrawal/',
+        "Users Account Details": 'api/user/accountdetails/',
 
     }
     return Response(list)

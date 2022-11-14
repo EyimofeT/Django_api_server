@@ -23,6 +23,16 @@ sys.path.append("..")
 
 # Create your views here.
 
+@api_view(['GET'])
+def apiOverview(request):
+    list = {
+        "User LogIn": '/api/authentication/login/',
+        "User LogOut": '/api/authentication/logout/',
+       
+
+    }
+    return Response(list)
+
 
 @api_view(['POST'])
 def logout(request):

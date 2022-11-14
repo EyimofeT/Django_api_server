@@ -25,10 +25,12 @@ to sync database
 
 ## Endpoints
 EndPoints                     -         Method 
-
-1 /api/signup/                - POST 
-2 /api/authentication/login/  - POST
-3 /api/authentication/logout/ - GET
-4 /api/userdeposit/           - POST 
-5 /api/withdrawal/            - POST
-6 /api/accountdetails/        - GET
+1 /api/                             - GET
+2 /api/authentication/              - GET
+3 /api/user                         - GET
+4 /api/authentication/login/        - POST
+5 /api/authentication/logout/       - GET
+6 /api/user/signup/                 - POST 
+7 /api/user/deposit/                - POST 
+8 /api/user/withdrawal/             - POST
+9 /api/user/accountdetails/         - GET

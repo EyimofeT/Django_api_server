@@ -15,7 +15,7 @@ class User(AbstractUser):
     password = models.CharField(max_length=200)
     # title = None
     balance = models.FloatField(default=0.0)
-    account_number= models.IntegerField( unique = True)
+    accountnumber= models.IntegerField( unique = True)
     # balance = 0
     # account_number = helpers.generate_account_number()
     # last_login = models.CharField(default=datetime.datetime.now(),max_length=200)

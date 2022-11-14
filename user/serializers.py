@@ -29,7 +29,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserCreatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('firstname', 'lastname','username','account_number', 'balance')
+        fields = ('firstname', 'lastname','username','accountnumber', 'balance')
        
 class UserDepositSerializer(serializers.ModelSerializer):
     class Meta:

@@ -39,7 +39,7 @@ def userCreate(request):
         request.data['username'] = request.data['username'].lower()
         password = request.data['password']
         request.data['balance'] = float(0)
-        request.data['account_number'] = helpers.generate_account_number()
+        request.data['accountnumber'] = helpers.generate_account_number()
         uname = str(request.data['username'])
         uniqueUsernameStatus = helpers.checkUsernameInput(uname)
         serializer = UserSerializer(data=request.data)

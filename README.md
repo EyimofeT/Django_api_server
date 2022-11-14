@@ -9,12 +9,7 @@ https://documenter.getpostman.com/view/15065406/2s8Yeixvw2
 
 ## installation
 install required packages:
-  -> Django==4.1.3
-    django-cors-headers==3.13.0
-    djangorestframework==3.14.0
-    djangorestframework-simplejwt==5.2.2
-    PyJWT==2.6.0
-    requests==2.28.1
+  -> pip install -r requirements.txt
 
  
 to run server

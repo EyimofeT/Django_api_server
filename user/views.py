@@ -21,10 +21,10 @@ import datetime
 @api_view(['GET'])
 def apiOverview(request):
     list = {
-        "User SignUp": "api/user/signup/",
-        "User Deposit": "api/user/deposit/",
-        "Users Withdrawal": 'api/user/withdrawal/',
-        "Users Account Details": 'api/user/accountdetails/',
+        "User SignUp": "/api/user/signup/",
+        "User Deposit": "/api/user/deposit/",
+        "Users Withdrawal": '/api/user/withdrawal/',
+        "Users Account Details": '/api/user/accountdetails/',
 
     }
     return Response(list)
@@ -32,49 +32,51 @@ def apiOverview(request):
 
 @api_view(['POST'])
 def userCreate(request):
-    # return Response({"Status":"Coming Soon"})
+    
     try:
+        uname=str(request.data['username'])
+        uniqueUsernameStatus = helpers.checkUsernameInput(uname)
         request.data['firstname'] = request.data['firstname'].lower()
         request.data['lastname'] = request.data['lastname'].lower()
         request.data['username'] = request.data['username'].lower()
         password = request.data['password']
-        request.data['balance'] = float(0)
         request.data['accountnumber'] = helpers.generate_account_number()
-        uname = str(request.data['username'])
-        uniqueUsernameStatus = helpers.checkUsernameInput(uname)
+        request.data['balance'] = float(0)
         serializer = UserSerializer(data=request.data)
-
-        if uniqueUsernameStatus == True:
-            try:
-                if serializer.is_valid():
-                    serializer.save()
-                    user = User.objects.all().last()
-                    serializer = UserCreatedSerializer(user)
-
-                    response = {
-                    "Status": "200",
-                    "data": [
-                        serializer.data
-                    ]
-                    }
-            except:
-                response = {
-                    "Error: User Not Created : Check Input"
-                }
+        
+       
     
-        elif uniqueUsernameStatus == False:
-            response = {
-                "Error: Username Already Exists"
-            }       
+        if uniqueUsernameStatus==True:
+             
+            if serializer.is_valid():  
+                serializer.save()
+                user = User.objects.all().last()
+                serializer = UserCreatedSerializer(user)
+                response = {
+                        "Status": "200",
+                        "data": [
+                            serializer.data
+                        ]
+                    }
+            else:
+                response = {"Status":"400",
+                "Message": "User Not Created  Check Input"
+                }
+        elif uniqueUsernameStatus==False:
+            response = {"Status":"400",
+                        
+                        "Message": "Username Already Exists"
+                        } 
 
+    
     except Exception as e:
         response = {
-            "Error Occured": str(e)
+            "message": str(e)
         }
-
+    
     return Response(response)
 
-
+       
 @api_view(['GET'])
 def accountdetails(request):
     token = request.COOKIES.get('jwt')

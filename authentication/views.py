@@ -37,7 +37,8 @@ def logout(request):
 
 @api_view(['POST'])
 def userLogin(request):
-    if (request.data['username'] is not None and request.data['password']is not None):
+    response = Response()
+    try:
         username_input = request.data['username'].lower()
         password_input = request.data['password']
         user = User.objects.filter(username=username_input).first()
@@ -57,18 +58,23 @@ def userLogin(request):
 
         }
         token = jwt.encode(payload, 'secret', algorithm='HS256')
-    # .decode('utf-8')
-
-        response = Response()
+        
+        
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
             "Message": "Login Successful",
             "Status": 200,
             'jwt': token
         }
-    
-    else:
-        raise AuthenticationFailed("username and password field required!")
+        # return response
+#    except:
+#         raise AuthenticationFailed("username and password field required!")
 
     # return Response(user_serializer.data)
+       # return response
+    except Exception as e:  # work on python 2.x
+        response.data = {
+            "Error Occured": str(e)
+        }
+   
     return response

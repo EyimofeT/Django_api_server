@@ -4,18 +4,16 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import datetime
 # from . import helpers
-# Create your models here.
 
-# class User(models.Model):
 
 
 class User(AbstractUser):
     firstname = models.CharField(max_length=200)
     lastname = models.CharField(max_length=200)
     username = models.CharField(max_length=200, unique=True)
-    email = models.CharField(max_length=200, unique=True)
+    email = models.CharField(max_length=200, default='n/a')
     password = models.CharField(max_length=200)
-    title = None
+    # title = None
     balance = models.FloatField(default=0.0)
     account_number= models.IntegerField( unique = True)
     # balance = 0

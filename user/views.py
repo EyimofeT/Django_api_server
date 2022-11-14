@@ -36,30 +36,30 @@ def apiOverview(request):
 def userCreate(request):
     try:
 
-        # request.data['first_name']=request.data['first_name'].capitalize()
-        # request.data['last_name']=request.data['last_name'].capitalize()
         request.data['firstname'] = request.data['firstname'].lower()
         request.data['lastname'] = request.data['lastname'].lower()
         request.data['username'] = request.data['username'].lower()
-        request.data['email'] = request.data['email'].lower()
-        request.data
-        # print(request.data)
+        password=request.data['password']
+        # request.data['email'] = request.data['email'].lower()
+        # request.data
+        print(request.data)
         serializer = UserSerializer(data=request.data)
         request.data['balance'] = float(0)
         request.data['account_number'] = helpers.generate_account_number()
         uname = str(request.data['username'])
-        email = str(request.data['email'])
+        # email = str(request.data['email'])
         uniqueUsernameStatus = helpers.checkUsernameInput(uname)
-        uniqueEmailStatus = helpers.checkEmailInput(email)
+        # uniqueEmailStatus = helpers.checkEmailInput(email)
         # print("here")
         # print(uniqueEmailStatus)
-        if uniqueUsernameStatus == True and uniqueEmailStatus == True:
+        # if uniqueUsernameStatus == True and uniqueEmailStatus == True:
+        if uniqueUsernameStatus == True:
             try:
-                
+
                 if serializer.is_valid():
-                    
+
                     serializer.save()
-                    
+
                     user = User.objects.all().last()
                     serializer = UserCreatedSerializer(user)
 
@@ -75,18 +75,19 @@ def userCreate(request):
                     }
             except Exception as e:
                 response = {"Something went wrong": e}
-        elif uniqueUsernameStatus == False and uniqueEmailStatus == True:
+        # elif uniqueUsernameStatus == False and uniqueEmailStatus == True:
+        elif uniqueUsernameStatus == False:
             response = {
                 "Error: Username Already Exists"
             }
-        elif uniqueUsernameStatus == True and uniqueEmailStatus == False:
-            response = {
-                "Error: Email Already Exists"
-            }
-        elif uniqueUsernameStatus == False and uniqueEmailStatus == False:
-            response = {
-                "Error: Username and Email Already Exists"
-            }
+        # elif uniqueUsernameStatus == True and uniqueEmailStatus == False:
+        #     response = {
+        #         "Error: Email Already Exists"
+        #     }
+        # elif uniqueUsernameStatus == False and uniqueEmailStatus == False:
+        #     response = {
+        #         "Error: Username and Email Already Exists"
+        #     }
 
     except Exception as e:  # work on python 2.x
         # logger.error('Failed to upload to ftp: '+ str(e))

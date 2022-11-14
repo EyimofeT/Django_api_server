@@ -41,8 +41,10 @@ def userLogin(request):
     try:
         username_input = request.data['username'].lower()
         password_input = request.data['password']
+        # user = User.objects.filter(username=username_input).first()
         user = User.objects.filter(username=username_input).first()
         # user_serializer = UserSerializer(user, many=False)
+        
         print("i am here1")
         if user is None:
             raise AuthenticationFailed("User not Found!")
@@ -72,7 +74,7 @@ def userLogin(request):
 
     except Exception as e:  # work on python 2.x
         response.data = {
-            "Error Occured": str(e)
+            "Error Occured": e
         }
         
    

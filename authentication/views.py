@@ -44,7 +44,7 @@ def userLogin(request):
         password_input = request.data['password']
         # user = User.objects.filter(username=username_input).first()
         print("i am here 0.5")
-        user = User.objects.filter(username=username_input).first()
+        user = User.objects.all().filter(username=username_input).first()
         print("i am here 0.9")
         # user_serializer = UserSerializer(user, many=False)
         

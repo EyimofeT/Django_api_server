@@ -39,10 +39,13 @@ def logout(request):
 def userLogin(request):
     response = Response()
     try:
+        print("i am here 0")
         username_input = request.data['username'].lower()
         password_input = request.data['password']
         # user = User.objects.filter(username=username_input).first()
+        print("i am here 0.5")
         user = User.objects.filter(username=username_input).first()
+        print("i am here 0.9")
         # user_serializer = UserSerializer(user, many=False)
         
         print("i am here1")

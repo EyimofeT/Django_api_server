@@ -43,13 +43,14 @@ def userLogin(request):
         password_input = request.data['password']
         user = User.objects.filter(username=username_input).first()
         # user_serializer = UserSerializer(user, many=False)
-
+        print("i am here1")
         if user is None:
             raise AuthenticationFailed("User not Found!")
 
         if not user.check_password(password_input):
             raise AuthenticationFailed("Incorrect Password!")
 
+        print("i am here2")
         payload = {
             'id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
@@ -57,24 +58,22 @@ def userLogin(request):
             "is_superuser": user.is_superuser,
 
         }
+        
+        print("i am here3")
         token = jwt.encode(payload, 'secret', algorithm='HS256')
         
-        
+        print("i am here4")
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
             "Message": "Login Successful",
             "Status": 200,
             'jwt': token
         }
-        # return response
-#    except:
-#         raise AuthenticationFailed("username and password field required!")
 
-    # return Response(user_serializer.data)
-       # return response
     except Exception as e:  # work on python 2.x
         response.data = {
             "Error Occured": str(e)
         }
+        
    
     return response
